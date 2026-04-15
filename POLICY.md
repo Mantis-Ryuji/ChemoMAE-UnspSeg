@@ -5,9 +5,11 @@
 * train / test 分割を採用する。
 * train で表現学習およびクラスタリングを行い、test で外部評価を行う。
 * train において、Cosine-KMeans の clustering objective を主決定軸、cosine-silhouette を補助判定軸として、objective 曲線の elbow に基づき最適クラスタ数を決定する。
-* 表現空間として、raw（SNV 後スペクトル）, PCA $\to \ell_2$-norm, および $n_{\rm mask}$ を変化させた ChemoMAE を比較する。なお、 $n_{\rm mask}=0$ は AE として扱う。
+* 表現空間として、raw（SNV 後スペクトル）, PCA $\to \ell_2$-norm, および $n_{\rm mask}$ を変化させた ChemoMAE を比較する。なお、 $n_{\rm mask}=0$ は AE として扱う（Augは切る）。
+* なお、Decoderについては探索を行わず、線形Decoderを用いることとする。
+* ChemoMAE n_mask 最良 について Aug(noise, tilt) のアブレーションを行う。
 * test における評価指標として、cosine-silhouette および SCS（空間的ラベル一貫性スコア）を用いる。
-* ChemoMAE については、 $n_{\rm mask}$ を系統的に変化させたときの挙動を比較し、そのうち最良の設定を後段の深掘り解析および頑健性評価に用いる。
+* **ChemoMAEの最良の設定を後段の深掘り解析および頑健性評価に用いる。**
 * 最適設定については、各クラスタの統計量を調査し、代表スペクトル・クラスタ中心・分布などを詳細に可視化する。
 * 入力摂動に対するクラスタラベルの頑健性を比較する。具体的には Gaussian noise, shortcut noise などを入力のみに加え、表現学習器・クラスタ中心・評価設定は固定する(cosine-silhouette, SCS, ラベル変化率)。ノイズの強度や組み合わせはいろいろ試してみよう。どういうノイズに強くどういうノイズに弱いか試したいし。
 * 初期値依存性について、同一の train 表現に対して seed を変更して Cosine-KMeans を複数回実行し、ラベル一致率を評価する。必要に応じて、その影響が test にどう伝播するかも補助的に確認する。
